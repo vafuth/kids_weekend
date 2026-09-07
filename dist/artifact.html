@@ -1,0 +1,766 @@
+<title>남매 나들이 달력</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* ============================================================
+   남매 나들이 달력 — styles
+   Mobile-first. Breakpoints: 600 (large phone) / 820 (tablet)
+   / 1000 (laptop) / 1280 (wide).
+   ============================================================ */
+
+:root{
+  --ground:#F5F7F3; --surface:#FFFFFF; --surface-2:#ECEFE8; --surface-3:#E3E7DD;
+  --ink:#18212C; --ink-2:#4C5764; --ink-3:#7B8794;
+  --line:#DCE0D6; --line-2:#C6CCBE;
+  --accent:#1B5E52; --accent-ink:#FFFFFF; --accent-soft:#E1EDE9;
+  --r-dj:#AC4620; --r-sj:#22705C; --r-gb:#8A6512; --r-cj:#37548C;
+  --hot:#B0431E; --live:#2F7D4F;
+  --shadow:0 1px 2px rgba(24,33,44,.05), 0 6px 18px rgba(24,33,44,.06);
+  --font-d:"Gowun Batang","Nanum Myeongjo","Apple SD Gothic Neo",serif;
+  --font-b:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-m:"IBM Plex Mono","SFMono-Regular",Menlo,monospace;
+  --pad:16px;
+  --tap:40px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#111519; --surface:#191E24; --surface-2:#20262E; --surface-3:#28303A;
+    --ink:#E9EDE9; --ink-2:#A7B2AF; --ink-3:#7A8683;
+    --line:#2B323A; --line-2:#3A434E;
+    --accent:#61C9B2; --accent-ink:#0D1B18; --accent-soft:#16322D;
+    --r-dj:#E28356; --r-sj:#4FC0A3; --r-gb:#D5AE4E; --r-cj:#82A0E3;
+    --hot:#E58459; --live:#7FB894;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111519; --surface:#191E24; --surface-2:#20262E; --surface-3:#28303A;
+  --ink:#E9EDE9; --ink-2:#A7B2AF; --ink-3:#7A8683;
+  --line:#2B323A; --line-2:#3A434E;
+  --accent:#61C9B2; --accent-ink:#0D1B18; --accent-soft:#16322D;
+  --r-dj:#E28356; --r-sj:#4FC0A3; --r-gb:#D5AE4E; --r-cj:#82A0E3;
+  --hot:#E58459; --live:#7FB894;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 6px 20px rgba(0,0,0,.28);
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--font-b);font-size:15px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  overflow-wrap:break-word;
+}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--pad) 64px}
+@media (min-width:600px){:root{--pad:22px}}
+@media (min-width:1000px){:root{--pad:32px}}
+@media (pointer:coarse){:root{--tap:44px}}
+
+/* ── header ──────────────────────────────────────────── */
+header.top{padding:26px 0 20px;border-bottom:1px solid var(--line)}
+@media (min-width:820px){header.top{padding:38px 0 24px}}
+.eyebrow{
+  font-family:var(--font-m);font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+}
+.eyebrow b{color:var(--accent);font-weight:600}
+.eyebrow .sep{opacity:.5}
+h1{
+  font-family:var(--font-d);font-weight:700;
+  font-size:clamp(27px,7vw,46px);line-height:1.2;
+  margin:10px 0 8px;text-wrap:balance;letter-spacing:-.01em;
+}
+.dek{color:var(--ink-2);max-width:62ch;margin:0;font-size:clamp(14px,3.6vw,15.5px)}
+
+/* ── briefing ────────────────────────────────────────── */
+.brief{
+  margin-top:22px;background:var(--surface);border:1px solid var(--line);
+  border-radius:14px;box-shadow:var(--shadow);overflow:hidden;
+  display:grid;grid-template-columns:1fr;
+}
+@media (min-width:820px){.brief{grid-template-columns:minmax(196px,232px) 1fr;margin-top:26px}}
+.brief-l{
+  background:var(--surface-2);padding:16px var(--pad);
+  border-bottom:1px solid var(--line);
+  display:flex;flex-direction:column;gap:12px;
+}
+@media (min-width:820px){
+  .brief-l{border-bottom:none;border-right:1px solid var(--line);padding:20px}
+}
+.brief-l h2{font-family:var(--font-d);font-size:16px;margin:0;font-weight:700}
+.tallies{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+@media (min-width:820px){.tallies{grid-template-columns:1fr;gap:9px}}
+.tally{display:flex;align-items:baseline;gap:8px;min-width:0}
+.tally .n{
+  font-family:var(--font-m);font-weight:600;font-size:20px;
+  font-variant-numeric:tabular-nums;color:var(--accent);min-width:1.5ch;
+}
+.tally .l{font-size:12.5px;color:var(--ink-2);min-width:0}
+.brief-r{padding:16px var(--pad)}
+@media (min-width:820px){.brief-r{padding:20px 22px}}
+.brief-r h3{
+  font-family:var(--font-m);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 12px;font-weight:600;
+}
+ul.picks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+ul.picks li{
+  display:grid;grid-template-columns:1fr;gap:2px;align-items:start;
+  font-size:14px;padding-bottom:10px;border-bottom:1px dashed var(--line);
+}
+@media (min-width:600px){ul.picks li{grid-template-columns:82px 1fr;gap:12px}}
+ul.picks li:last-child{border-bottom:none;padding-bottom:0}
+ul.picks .d{
+  font-family:var(--font-m);font-size:11.5px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+@media (min-width:600px){ul.picks .d{padding-top:2px}}
+ul.picks .t{font-weight:600;min-width:0}
+ul.picks .why{color:var(--ink-2);font-weight:400;display:block;font-size:13.5px}
+ul.picks button.linkish{
+  background:none;border:none;padding:0;margin:0;font:inherit;font-weight:600;
+  color:var(--ink);text-align:left;cursor:pointer;
+  text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px;
+}
+ul.picks button.linkish:hover{text-decoration-color:var(--accent);color:var(--accent)}
+
+/* ── filters ─────────────────────────────────────────── */
+.filters{
+  position:sticky;top:0;z-index:30;
+  background:var(--ground);
+  border-bottom:1px solid var(--line);
+  margin:26px calc(var(--pad) * -1) 0;padding:10px var(--pad) 9px;
+}
+@supports (backdrop-filter:blur(8px)){
+  .filters{background:color-mix(in srgb,var(--ground) 90%,transparent);backdrop-filter:blur(10px)}
+}
+.frow{
+  display:flex;gap:8px;align-items:center;
+  overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  scroll-padding-inline:var(--pad);
+  padding-bottom:2px;
+}
+.frow::-webkit-scrollbar{display:none}
+.frow + .frow{margin-top:8px}
+@media (min-width:1000px){.frow{flex-wrap:wrap;overflow:visible}}
+.flabel{
+  font-family:var(--font-m);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:600;flex:0 0 auto;
+}
+.chip{
+  flex:0 0 auto;font:inherit;font-size:13px;line-height:1.3;
+  min-height:var(--tap);padding:6px 13px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);
+  cursor:pointer;transition:background .14s,border-color .14s,color .14s;
+  display:inline-flex;align-items:center;white-space:nowrap;
+}
+@media (min-width:600px){.chip{min-height:34px;padding:5px 12px}}
+.chip:hover{border-color:var(--accent);color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.chip .dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px}
+.chip[aria-pressed="true"] .dot{background:var(--accent-ink)!important}
+input.q{
+  flex:0 0 auto;font:inherit;font-size:16px;/* 16px prevents iOS zoom-on-focus */
+  min-height:var(--tap);padding:6px 13px;border-radius:999px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink);
+  min-width:170px;max-width:240px;
+}
+@media (min-width:600px){input.q{font-size:13.5px;min-height:34px}}
+input.q::placeholder{color:var(--ink-3)}
+.count{
+  flex:0 0 auto;margin-left:auto;padding-left:8px;
+  font-family:var(--font-m);font-size:11.5px;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+}
+
+/* ── bands ───────────────────────────────────────────── */
+section.band{margin-top:34px}
+@media (min-width:820px){section.band{margin-top:42px}}
+.bandhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.bandhead h2{font-family:var(--font-d);font-weight:700;font-size:clamp(20px,5vw,25px);margin:0}
+.bandhead .range{font-family:var(--font-m);font-size:11.5px;color:var(--ink-3);letter-spacing:.02em}
+.bandnote{color:var(--ink-2);font-size:13.5px;margin:0 0 16px;max-width:66ch}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media (min-width:620px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}}
+@media (min-width:1000px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* ── card ────────────────────────────────────────────── */
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;
+  padding:15px 16px 14px 19px;position:relative;
+  display:flex;flex-direction:column;gap:9px;overflow:hidden;min-width:0;
+}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rc,var(--accent))}
+.card.dated{box-shadow:var(--shadow);border-color:var(--line-2)}
+.chead{display:flex;justify-content:space-between;align-items:baseline;gap:8px;min-width:0}
+.when{
+  font-family:var(--font-m);font-size:12px;font-weight:600;color:var(--rc);
+  font-variant-numeric:tabular-nums;letter-spacing:-.01em;min-width:0;
+}
+.region{font-size:10.5px;letter-spacing:.05em;color:var(--ink-3);white-space:nowrap;flex:0 0 auto}
+.dday{
+  display:inline-flex;align-items:center;gap:4px;align-self:flex-start;
+  font-family:var(--font-m);font-size:10.5px;font-weight:600;letter-spacing:.02em;
+  padding:2px 7px;border-radius:5px;background:var(--surface-2);color:var(--ink-2);
+}
+.dday.soon{background:color-mix(in srgb,var(--hot) 14%,transparent);color:var(--hot)}
+.dday.live{background:color-mix(in srgb,var(--live) 16%,transparent);color:var(--live)}
+.card h3{font-family:var(--font-d);font-weight:700;font-size:17.5px;line-height:1.35;margin:0;text-wrap:balance}
+@media (min-width:620px){.card h3{font-size:18.5px}}
+.hook{color:var(--ink-2);font-size:13.5px;margin:0;flex-grow:1}
+.meta{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--ink-2)}
+.meta div{display:grid;grid-template-columns:40px minmax(0,1fr);gap:8px}
+.meta .k{color:var(--ink-3);font-size:11px;font-family:var(--font-m)}
+.fits{display:flex;gap:16px;padding:8px 0 2px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.fit{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2)}
+.fit .who{font-weight:600;color:var(--ink)}
+.bars{display:flex;gap:2.5px}
+.bars i{width:13px;height:5px;border-radius:2px;background:var(--surface-3);display:block}
+.bars i.on{background:var(--rc)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--surface-2);color:var(--ink-2);letter-spacing:.02em}
+.tag.rsv{background:var(--accent-soft);color:var(--accent);font-weight:600}
+.tag.warn{background:color-mix(in srgb,var(--hot) 14%,transparent);color:var(--hot);font-weight:600}
+.acts{display:flex;gap:8px;margin-top:2px}
+.btn{
+  font:inherit;font-size:13px;font-weight:600;
+  min-height:var(--tap);padding:8px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line-2);background:var(--surface-2);color:var(--ink);
+  transition:border-color .14s,color .14s,filter .14s;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;white-space:nowrap;
+}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);flex:1 1 auto}
+.btn.solid:hover{color:var(--accent-ink);filter:brightness(1.08)}
+.empty{
+  color:var(--ink-3);font-size:14px;padding:28px 16px;text-align:center;
+  border:1px dashed var(--line-2);border-radius:12px;margin-top:24px;
+}
+.pastline{
+  margin-top:26px;font-size:13px;color:var(--ink-3);
+  display:flex;gap:8px;align-items:center;flex-wrap:wrap;
+}
+.pastline button{
+  font:inherit;font-size:13px;background:none;border:none;padding:0;color:var(--accent);
+  font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
+}
+.card.past{opacity:.6}
+.card.past .when{text-decoration:line-through}
+
+/* ── modal: bottom sheet on phones, dialog on tablet+ ── */
+.scrim{
+  position:fixed;inset:0;background:rgba(12,18,16,.55);z-index:100;
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.scrim[hidden]{display:none}
+@media (min-width:700px){
+  .scrim{align-items:flex-start;padding:5vh 20px;overflow-y:auto}
+}
+.sheet{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:16px 16px 0 0;width:100%;
+  max-height:92vh;max-height:92dvh;
+  display:flex;flex-direction:column;
+  box-shadow:0 -8px 40px rgba(0,0,0,.3);
+}
+@media (min-width:700px){
+  .sheet{
+    border-radius:16px;max-width:640px;max-height:none;
+    box-shadow:0 24px 60px rgba(0,0,0,.28);
+  }
+}
+.sheet-top{
+  padding:20px var(--pad) 16px;border-bottom:1px solid var(--line);
+  position:relative;background:var(--surface-2);flex:0 0 auto;
+  border-radius:16px 16px 0 0;
+}
+.sheet-top::before{
+  content:"";position:absolute;left:0;top:0;right:0;height:4px;
+  background:var(--rc,var(--accent));border-radius:16px 16px 0 0;
+}
+.sheet-top .when{font-size:12.5px;padding-right:48px;display:block}
+.sheet-top h2{
+  font-family:var(--font-d);font-weight:700;font-size:clamp(20px,5.4vw,25px);
+  margin:6px 0;line-height:1.3;padding-right:44px;text-wrap:balance;
+}
+.sheet-top p{margin:0;color:var(--ink-2);font-size:13.5px}
+.close{
+  position:absolute;top:14px;right:14px;
+  width:var(--tap);height:var(--tap);border-radius:8px;
+  border:1px solid var(--line-2);background:var(--surface);color:var(--ink-2);
+  font-size:18px;line-height:1;cursor:pointer;
+}
+.close:hover{color:var(--ink);border-color:var(--accent)}
+.sheet-body{padding:18px var(--pad) 4px;overflow-y:auto;flex:1 1 auto;-webkit-overflow-scrolling:touch}
+.facts{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;
+  background:var(--line);border:1px solid var(--line);border-radius:10px;
+  overflow:hidden;margin:0 0 18px;
+}
+@media (min-width:520px){.facts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.facts > div{background:var(--surface);padding:9px 11px;min-width:0}
+.facts dt{
+  font-family:var(--font-m);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 3px;
+}
+.facts dd{margin:0;font-size:13px;font-weight:500}
+.blk{margin-bottom:18px}
+.blk h4{
+  font-family:var(--font-m);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 7px;font-weight:600;
+}
+.blk > p{margin:0;font-size:14.5px;color:var(--ink)}
+.kid{
+  display:grid;grid-template-columns:1fr;gap:4px;
+  padding:9px 0;border-bottom:1px dashed var(--line);
+}
+@media (min-width:520px){.kid{grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:baseline}}
+.kid:last-child{border-bottom:none}
+.kid .badge{
+  font-family:var(--font-m);font-size:10.5px;font-weight:600;padding:2px 8px;
+  border-radius:5px;background:var(--accent-soft);color:var(--accent);
+  white-space:nowrap;justify-self:start;
+}
+.kid p{font-size:14px;color:var(--ink-2);margin:0}
+ul.tiplist{margin:0;padding-left:18px;font-size:14px;color:var(--ink-2);display:flex;flex-direction:column;gap:5px}
+.caution{
+  background:color-mix(in srgb,var(--hot) 9%,transparent);
+  border-left:3px solid var(--hot);padding:10px 13px;border-radius:0 8px 8px 0;
+  font-size:13.5px;color:var(--ink);
+}
+.sheet-foot{
+  padding:14px var(--pad) calc(16px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--line);background:var(--surface-2);flex:0 0 auto;
+  display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+}
+.sheet-foot .btn.solid{flex:1 1 200px}
+.src{font-size:11px;color:var(--ink-3);width:100%;font-family:var(--font-m);word-break:break-all}
+
+/* ── footer ──────────────────────────────────────────── */
+footer{
+  margin-top:48px;padding-top:20px;border-top:1px solid var(--line);
+  color:var(--ink-3);font-size:12.5px;display:flex;flex-direction:column;gap:8px;
+}
+footer p{margin:0;max-width:74ch}
+footer strong{color:var(--ink-2)}
+footer a{color:var(--accent)}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+@media print{.filters,.acts,.brief-l{display:none}.card{break-inside:avoid;box-shadow:none}}
+
+</style>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">
+    <span>대전 · 세종 · 공주 · 부여 · 청주</span>
+    <span class="sep">·</span>
+    <b id="today">—</b>
+  </div>
+  <h1>이번 주, 이번 달 남매 나들이</h1>
+  <p class="dek"><span id="kid-intro">두 아이가 <em>같이</em> 재미있어할 만한 것만 골랐습니다.</span> 대전에서 차로 1시간 안쪽. 카드마다 아이별 난이도와 흥미 포인트, 그리고 예약·공식 사이트로 바로 가는 버튼이 있습니다.</p>
+
+  <div class="brief">
+    <div class="brief-l">
+      <h2>한눈에 보기</h2>
+      <div class="tallies">
+        <div class="tally"><span class="n" id="t-week">–</span><span class="l" id="lbl-week">이번 주</span></div>
+        <div class="tally"><span class="n" id="t-month">–</span><span class="l" id="lbl-month">이번 달</span></div>
+        <div class="tally"><span class="n" id="t-next">–</span><span class="l" id="lbl-next">다음 달</span></div>
+        <div class="tally"><span class="n" id="t-always">–</span><span class="l">언제든 가능</span></div>
+      </div>
+    </div>
+    <div class="brief-r">
+      <h3>먼저 챙길 것</h3>
+      <ul class="picks" id="picks"></ul>
+    </div>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="frow" id="region-chips">
+    <span class="flabel">지역</span>
+    <button class="chip" data-f="region" data-v="all" aria-pressed="true">전체</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">종류</span>
+    <button class="chip" data-f="type" data-v="all" aria-pressed="true">전체</button>
+    <button class="chip" data-f="type" data-v="과학" aria-pressed="false">과학·수학</button>
+    <button class="chip" data-f="type" data-v="역사" aria-pressed="false">역사·유적</button>
+    <button class="chip" data-f="type" data-v="축제" aria-pressed="false">축제</button>
+    <button class="chip" data-f="type" data-v="전시" aria-pressed="false">전시·미술</button>
+    <button class="chip" data-f="type" data-v="만들기" aria-pressed="false">만들기</button>
+    <button class="chip" data-f="type" data-v="자연" aria-pressed="false">자연·동물</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">아이</span>
+    <button class="chip" data-f="age" data-v="all" aria-pressed="true">둘 다 고려</button>
+    <button class="chip" data-f="age" data-v="both" aria-pressed="false">둘 다 딱 맞음</button>
+    <input class="q" id="q" type="search" placeholder="이름·장소로 찾기" aria-label="이름이나 장소로 검색">
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main id="bands"></main>
+
+<footer>
+  <p><strong>일정은 반드시 공식 사이트에서 한 번 더 확인하세요.</strong> 날짜·시간·예약 방식은 주최 측 사정으로 바뀝니다. 각 카드의 ‘공식 사이트’ 버튼은 검색 결과가 아니라 주최 기관 페이지 또는 예약 창구로 바로 연결됩니다.</p>
+  <p>‘이번 주 / 이번 달 / 다음 달’ 구분은 페이지를 열 때 한국 시각 기준으로 다시 계산되므로, 날짜가 지나면 자동으로 옮겨지거나 목록에서 빠집니다. 행사 내용 자체는 매일 오전 9시(KST)에 갱신됩니다.</p>
+  <p>날짜가 확정된 항목은 대전광역시·공주시·세종시·백제문화제·국립중앙과학관 공식 공지에서 확인한 것이고, ‘언제든 가능’ 항목은 상설 운영 기관입니다. 상설 기관도 휴관일(대개 월요일)과 명절 당일 휴관 여부는 각 사이트에서 확인이 필요합니다.</p>
+  <p>데이터 갱신일 <b id="updated">—</b> · <a href="https://github.com/">저장소에서 데이터 수정하기</a></p>
+</footer>
+
+</div>
+
+<div class="scrim" id="scrim" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet" id="sheet"></div>
+</div>
+<script>
+window.__EVENTS__ = {"meta": {"updated": "2026-09-08", "timezone": "Asia/Seoul", "home": "대전", "kids": [{"key": "younger", "role": "동생", "birthYear": 2019}, {"key": "older", "role": "형", "birthYear": 2016}], "note": "날짜가 확정된 항목은 주최 기관 공식 공지에서 확인한 것입니다. always=true 항목은 상설 운영 기관이며 휴관일은 각 사이트에서 확인이 필요합니다.", "ageNote": "나이는 세는 나이(현재연도 - 출생연도 + 1)로 매년 1월 1일에, 학년은 3월 1일에 자동으로 올라갑니다."}, "regions": {"대전": "--r-dj", "세종": "--r-sj", "공주·부여": "--r-gb", "청주": "--r-cj"}, "events": [{"id": "book", "region": "공주·부여", "start": "2026-09-12", "end": "2026-09-13", "title": "공주 도서관 책축제 「전지적 독서시점」", "place": "아트센터 고마 야외무대 일원, 공주", "cost": "무료", "rsv": "자유 참여", "hours": "오후 시간대 중심 (세부 시간 공지 확인)", "stay": "2~3시간", "types": ["축제", "만들기"], "younger": 3, "older": 3, "hook": "야외 잔디밭에 책 놀이 부스가 깔리는 이틀. 읽기보다 만들고 뛰는 쪽에 가깝습니다.", "why": "‘책축제’라는 이름과 달리 실제로는 야외 체험 부스 중심이라, 아직 긴 글을 부담스러워하는 8살도 지루할 틈이 없습니다. 아트센터 고마 앞 잔디마당이 넓어서 두 아이가 각자 다른 부스로 흩어져도 시야에서 벗어나지 않습니다.", "tipYounger": "만들기 부스와 그림책 낭독 위주로 도세요. 결과물을 손에 쥐고 나오는 활동이 만족도가 높습니다.", "tipOlder": "작가와의 만남·독서 퀴즈처럼 ‘내가 아는 걸 써먹는’ 프로그램이 붙는 편입니다. 동생과 부스를 나눠 맡기면 형 대접을 받습니다.", "tips": ["같은 주말 금·토 저녁 산성시장 야시장이 열립니다. 낮 책축제 → 저녁 야시장으로 묶으면 하루가 채워집니다.", "야외 행사라 돗자리와 모자를 챙기세요.", "금강신관공원 주차장을 쓰고 걸어 들어가는 편이 편합니다."], "caution": "우천 시 프로그램이 축소되거나 실내로 옮겨갈 수 있어 당일 아침 공지 확인이 필요합니다.", "link": "https://www.gongju.go.kr/prog/culturalEvent/kr/sub04_05/list.do", "linkLabel": "공주시 행사정보에서 확인"}, {"id": "nightmarket", "region": "공주·부여", "start": "2026-09-04", "end": "2026-10-17", "recur": {"weekdays": [5, 6], "exclude": ["2026-09-25", "2026-09-26"], "label": "매주 금·토"}, "title": "공주산성시장 밤마실 야시장", "place": "공주산성시장 문화공원, 공주", "cost": "입장 무료 (먹거리 유료)", "rsv": "자유 참여", "hours": "금·토 17:00 – 22:00", "stay": "1~2시간", "types": ["축제"], "younger": 3, "older": 3, "hook": "금·토 저녁 5시부터 밤 10시까지, 공산성 야경을 등지고 걷는 먹거리 장터.", "why": "아이들에게 ‘밤에 밖에 나와 있다’는 것 자체가 이벤트입니다. 규모가 크지 않아 한 바퀴가 부담스럽지 않고, 부모도 앉아서 먹을 자리가 있습니다. 9월 4일부터 10월 17일까지 이어지는 긴 행사라 날짜를 고르기 쉽습니다.", "tipYounger": "현금 또는 소액을 손에 쥐여주고 직접 사보게 하면 그 자체가 활동이 됩니다.", "tipOlder": "길 건너 공산성 성벽 야간 조명까지 걸어보세요. 백제문화제 전에 공산성을 미리 봐두면 10월에 훨씬 잘 이해합니다.", "tips": ["추석 연휴인 9/25·26은 쉽니다.", "백제문화제 기간인 10/4·10/11에는 특별 운영합니다."], "caution": "추석 연휴(9/25–26) 휴장에 유의하세요.", "link": "https://www.gongju.go.kr/prog/culturalEvent/kr/sub04_05/list.do", "linkLabel": "공주시 행사정보에서 확인"}, {"id": "thinking", "region": "대전", "start": "2026-07-14", "end": "2026-10-18", "title": "국립중앙과학관 특별전 「생각 중」", "place": "창의나래관 특별전시실, 대전 유성구", "cost": "창의나래관 관람료 별도", "rsv": "예약 권장", "hours": "화–일 09:30 – 17:50 (월요일 휴관)", "stay": "1~1.5시간 (과학관 전체는 반나절)", "types": ["과학", "전시"], "younger": 2, "older": 3, "hook": "‘생각하는 것과 계산하는 것은 뭐가 다른가’를 다루는 특별전. 지금 대전에서 가장 11살에게 맞는 전시입니다.", "why": "사람의 사고와 기계의 계산을 나란히 놓고 보여주는 구성이라, AI를 이미 어렴풋이 알고 있는 초4에게 개념을 정리해줄 만합니다. 종료일이 정해져 있으므로 일찍 다녀오는 편이 안전합니다.", "tipYounger": "설명 패널은 어려울 수 있습니다. 손으로 조작하는 코너 위주로 돌고, 나머지는 부모가 한 문장씩 통역해주세요.", "tipOlder": "전시 주제를 그대로 자유탐구·독후활동 소재로 쓸 수 있습니다. 관람 후 ‘사람이 더 잘하는 것 3가지’를 적어보게 하면 남습니다.", "tips": ["같은 부지의 어린이과학관·꿈아띠체험관은 별도 예약제입니다. 함께 볼 계획이면 예약을 먼저 잡으세요.", "주차는 넉넉하지만 주말 오전 11시 이후엔 붐빕니다."], "caution": "창의나래관은 상설전시관과 요금이 별개입니다. 통합권 여부를 예약 페이지에서 확인하세요.", "link": "https://www.science.go.kr/mps/1044/bbs/321/moveBbsNttList.do", "linkLabel": "특별기획전시 공지 보기"}, {"id": "peaktime", "region": "공주·부여", "start": "2026-09-12", "end": "2026-09-12", "title": "전국청년축제 「피크타임 페스티벌」", "place": "금강신관공원, 공주", "cost": "무료", "rsv": "자유 참여", "hours": "오후~저녁", "stay": "30분~1시간", "types": ["축제"], "younger": 1, "older": 2, "hook": "청년 대상 축제라 아이 프로그램은 적습니다. 다만 무대·푸드트럭 구경 삼아 들르기엔 좋습니다.", "why": "이 카드는 ‘가야 할 곳’보다 ‘같은 날 같은 공원에서 열린다는 사실을 알고 가라’는 쪽에 가깝습니다. 금강신관공원 일대가 붐비고 주차가 어려워질 수 있어, 책축제·야시장 동선을 짤 때 감안해야 합니다.", "tipYounger": "체험 부스보다는 무대 음악과 푸드트럭 정도입니다. 오래 머물 곳은 아닙니다.", "tipOlder": "공연 무대와 버스킹을 좋아하는 성향이라면 30분 정도 구경거리는 됩니다.", "tips": ["같은 날 같은 공원 권역이라 주차 혼잡을 예상하고 일찍 출발하세요."], "caution": "연령 타깃이 청년층이라 아이 눈높이 프로그램은 기대하지 마세요.", "link": "https://www.gongju.go.kr/prog/culturalEvent/kr/sub04_05/list.do", "linkLabel": "공주시 행사정보에서 확인"}, {"id": "mathcenter", "region": "대전", "start": "2026-09-19", "end": "2026-09-20", "title": "「수(數)상한 과학치료 센터」", "place": "국립중앙과학관 어린이과학관, 대전 유성구", "cost": "어린이과학관 입장권", "rsv": "예약 필수", "hours": "10:00 – 17:00", "stay": "1.5~2시간", "types": ["과학"], "younger": 3, "older": 3, "hook": "수학을 ‘치료’ 콘셉트로 푼 주말 이벤트. 남매가 같이 즐기기에 균형이 가장 좋습니다.", "why": "어린이과학관에서 이틀만 열리는 한정 프로그램입니다. 롤플레이 형식이라 8살은 놀이로 받아들이고, 11살은 문제 풀이로 받아들여 같은 공간에서 각자의 난이도로 참여할 수 있습니다.", "tipYounger": "‘환자’ 역할로 미션을 받아 도는 형식이면 8살이 훨씬 몰입합니다. 형에게 도움 요청하게 두세요.", "tipOlder": "연산·도형 문제 난이도가 초3~4 수준으로 붙는 편입니다. 동생 미션을 대신 풀어주지 않도록 역할을 나눠주세요.", "tips": ["어린이과학관은 회차별 정원제입니다. 통합예약 누리집에서 미리 잡으세요.", "같은 날 특별전 「생각 중」까지 묶으면 하루 코스가 됩니다."], "caution": "어린이과학관은 저학년 대상 비중이 커서, 11살에겐 이 특별 이벤트가 없는 날엔 다소 시시할 수 있습니다.", "link": "https://rsvn.science.go.kr/nsm/exbtrsvn/dspy/0021", "linkLabel": "어린이과학관 예약하기"}, {"id": "starlecture", "region": "대전", "start": "2026-09-19", "end": "2026-09-19", "title": "「별의별 과학특강」 9월", "place": "국립중앙과학관 과학기술관, 대전 유성구", "cost": "홈페이지 공지 확인", "rsv": "사전 신청", "hours": "주말 낮 (세부 시간 공지 확인)", "stay": "1~1.5시간", "types": ["과학"], "younger": 1, "older": 3, "hook": "월 1회 열리는 과학 강연. 11살이 ‘앉아서 듣는 것’에 재미를 붙이기 시작했다면 좋은 첫 강연입니다.", "why": "체험이 아니라 강연이라는 점이 이 카드의 핵심입니다. 초4 정도부터 내용을 따라갈 수 있고, 강연 후 질문 시간이 아이에게 의외로 큰 경험이 됩니다.", "tipYounger": "착석 강연이라 8살에겐 길게 느껴집니다. 동생은 다른 보호자와 어린이과학관 쪽으로 나누는 편이 현실적입니다.", "tipOlder": "주제에 관심이 있으면 질문 하나를 미리 준비해 가게 하세요. 강연자에게 직접 묻는 경험이 남습니다.", "tips": ["정원이 작아 신청이 일찍 마감됩니다. 행사안내 게시판을 먼저 확인하세요.", "같은 날 어린이과학관 「수상한 과학치료 센터」와 겹칩니다. 남매를 나눠 각각 참여시키는 방법이 있습니다."], "caution": "매월 주제가 바뀝니다. 이번 달 주제를 확인한 뒤 아이 관심사와 맞는지 판단하세요.", "link": "https://www.science.go.kr/mps/1070/bbs/431/moveBbsNttList.do", "linkLabel": "과학관 행사안내 보기"}, {"id": "chuseok", "region": "대전", "start": "2026-09-24", "end": "2026-09-27", "closed": ["2026-09-25"], "title": "한가위 과학상회", "place": "국립중앙과학관 세미나실·꿈아띠광장, 대전 유성구", "cost": "무료 / 일부 유료", "rsv": "일부 예약", "hours": "9.24·9.26·9.27 운영 / 9.25(추석 당일) 휴관", "stay": "2~3시간", "types": ["과학", "만들기"], "younger": 3, "older": 3, "hook": "추석 연휴에 문을 여는 과학관의 명절 브랜드 행사. 연휴에 갈 데 없을 때의 답입니다.", "why": "명절 전통놀이와 과학 만들기를 섞은 구성이라 연령 폭이 넓습니다. 추석 당일(9/25)은 쉬지만 앞뒤 사흘을 여니, 연휴 중 하루를 통째로 채울 수 있는 몇 안 되는 선택지입니다.", "tipYounger": "제기·투호 같은 전통놀이 코너에서 오래 머뭅니다. 만들기 키트는 대체로 저학년 난이도로 맞춰져 있습니다.", "tipOlder": "과학 원리를 설명하는 부스에서 동생에게 설명해주는 역할을 맡기면 지루해하지 않습니다.", "tips": ["연휴 중 가장 붐비는 시간은 오후 1~3시입니다. 개관 직후를 노리세요.", "일부 만들기 부스는 재료 소진 시 조기 마감합니다."], "caution": "9월 25일 추석 당일은 휴관입니다.", "link": "https://www.science.go.kr/mps/1070/bbs/431/moveBbsNttList.do", "linkLabel": "과학관 행사안내 보기"}, {"id": "baekje-gj", "region": "공주·부여", "start": "2026-10-03", "end": "2026-10-11", "title": "제72회 백제문화제 · 공주", "place": "금강신관공원 · 공산성 · 왕도심 일원, 공주", "cost": "대부분 무료 (일부 체험 유료)", "rsv": "일부 사전예약", "hours": "11:00 – 22:00", "stay": "반나절~하루", "types": ["축제", "역사"], "younger": 3, "older": 3, "hook": "9일간 이어지는 이 지역 최대 축제. 금강에 띄우는 유등과 공산성 성벽 조명이 압권입니다.", "why": "11살에겐 백제사 수업이 실물로 펼쳐지는 자리이고, 8살에겐 유등·퍼레이드·불꽃이라는 순수한 볼거리입니다. 하나의 행사로 두 연령을 동시에 만족시킬 수 있는 흔치 않은 경우라, 미리 계획을 잡아둘 가치가 있습니다.", "tipYounger": "해 진 뒤 금강 유등과 퍼레이드가 하이라이트입니다. 낮보다 저녁 방문을 권합니다.", "tipOlder": "공산성 성곽 걷기와 무령왕릉(송산리 고분군) 연계 관람을 넣으세요. 축제 체험 부스 중 백제 갑옷·문양 만들기가 초4 난이도에 맞습니다.", "tips": ["부여에서도 같은 기간 동시 개최됩니다. 하루씩 나눠 다녀오는 방법도 있습니다.", "10/4·10/11에는 산성시장 야시장이 특별 운영됩니다.", "주말 주차가 매우 혼잡합니다. 셔틀 운행 정보를 공식 사이트에서 확인하세요."], "caution": "체험 프로그램 일부는 사전예약제이며 축제 시작 전에 마감됩니다. 공식 사이트에서 예약 오픈을 확인하세요.", "link": "https://www.baekjeculturalfestival.kr/", "linkLabel": "백제문화제 공식 사이트"}, {"id": "baekje-by", "region": "공주·부여", "start": "2026-10-03", "end": "2026-10-11", "title": "제72회 백제문화제 · 부여", "place": "정림사지 · 석탑로 · 관북리유적, 부여", "cost": "대부분 무료 (일부 체험 유료)", "rsv": "일부 사전예약", "hours": "축제 기간 중 (세부 시간 공식 사이트 확인)", "stay": "반나절", "types": ["축제", "역사"], "younger": 2, "older": 3, "hook": "주제는 ‘아름다운 백제, 빛나는 사비’. 공주 쪽보다 차분하고, 유적 자체를 보는 재미가 큽니다.", "why": "정림사지 오층석탑을 중심으로 시가지 전체가 행사장이 됩니다. 공주가 스케일과 야경이라면 부여는 유적과 밀도입니다. 역사에 관심이 붙은 11살에게는 부여 쪽이 더 인상적일 수 있습니다.", "tipYounger": "유적 관람 비중이 높아 8살에겐 다소 정적입니다. 체험 부스가 모인 구역을 먼저 확인하고 동선을 짜세요.", "tipOlder": "사비 시대와 웅진 시대의 차이를 공주와 비교하며 보면 이해가 훨씬 선명해집니다.", "tips": ["국립부여박물관과 묶어서 볼 수 있지만, 상설전시가 재단장 중이니 해당 카드를 먼저 확인하세요.", "궁남지 산책로가 걷기 좋아 아이들과 쉬어가기 적당합니다."], "caution": "부여는 대전에서 차로 약 1시간입니다. 축제 기간 시가지 교통 통제 구간을 미리 확인하세요.", "link": "https://www.baekjeculturalfestival.kr/", "linkLabel": "백제문화제 공식 사이트"}, {"id": "hangeul", "region": "세종", "start": "2026-10-09", "end": "2026-10-11", "title": "2026 세종한글축제", "place": "세종 갈매로 387(어진동) 일원", "cost": "무료", "rsv": "일부 프로그램 사전예약", "hours": "주간·야간 프로그램 운영", "stay": "반나절", "types": ["축제", "만들기"], "younger": 3, "older": 3, "hook": "한글날에 맞춰 열리는 세종시 대표 축제. 대전에서 30분, 접근성이 가장 좋은 큰 행사입니다.", "why": "주제가 ‘한글’이라 체험 프로그램이 만들기·글씨·놀이로 자연스럽게 나뉩니다. 8살에겐 자모를 가지고 노는 활동이, 11살에겐 훈민정음 창제 원리나 캘리그래피 쪽이 붙습니다. 호수공원·중앙공원 일대라 뛰어놀 공간도 충분합니다.", "tipYounger": "한글 자모 블록·도장 찍기 같은 손 활동이 많습니다. 야간 프로그램도 있어 저녁까지 버틸 만합니다.", "tipOlder": "프로그램 사전예약 목록을 미리 훑고 관심 있는 것 한두 개를 직접 고르게 하세요. 선택권을 주면 참여도가 달라집니다.", "tips": ["공식 사이트에서 프로그램 사전예약과 리플릿 PDF를 받을 수 있습니다.", "주차 안내가 사이트에 따로 있습니다. 축제 기간 임시주차장을 확인하세요.", "국립세종수목원이 가까워 오전 수목원 → 오후 축제 동선이 가능합니다."], "caution": "인기 체험은 사전예약분이 먼저 소진됩니다. 예약 오픈 여부를 확인하세요.", "link": "https://sjfestival.kr/", "linkLabel": "세종한글축제 예약·프로그램"}, {"id": "jikjifest", "region": "청주", "start": "2026-09-04", "end": "2026-09-06", "title": "직지문화축제", "place": "청주고인쇄박물관 · 청주예술의전당, 청주", "cost": "무료", "rsv": "자유 참여", "hours": "축제 기간 중", "stay": "반나절", "types": ["축제", "만들기", "역사"], "younger": 3, "older": 3, "hook": "금속활자·비누·나무 인두 등 손으로 하는 체험 부스가 모이는 청주의 가을 축제.", "why": "직지를 주제로 인쇄·공예 체험이 한자리에 모입니다. 스탬프 투어가 있어 아이들이 목표를 갖고 돌아다닐 수 있습니다.", "tipYounger": "비누 만들기·블록 만들기 같은 저학년 부스가 넉넉합니다.", "tipOlder": "금속활자 인쇄와 나무 인두 체험이 초4 손 힘에 맞습니다.", "tips": ["매년 가을 청주고인쇄박물관 일원에서 열립니다. 내년 일정을 미리 챙겨두세요."], "caution": "2026년 회차는 9월 6일에 종료되었습니다. 상설 관람은 청주고인쇄박물관 카드를 참고하세요.", "link": "https://jikjifestival.com/", "linkLabel": "직지문화축제 공식 사이트"}, {"id": "playroom", "region": "대전", "always": true, "title": "대전시립박물관 어린이 체험실 「우리놀이터」", "place": "대전시립박물관, 대전 유성구", "cost": "무료", "rsv": "예약 필수", "hours": "화–일 (월요일 휴관) · 월별 회차 예약", "stay": "1~2시간", "types": ["역사", "만들기"], "younger": 3, "older": 1, "hook": "전통 생활문화를 놀이로 풀어낸 무료 체험실. 8살 전용이라고 생각하는 편이 정확합니다.", "why": "회차별 예약제라 사람이 적고, 무료입니다. 다만 대상 연령이 저학년이라 11살에겐 확실히 시시합니다. 동생만 체험실에 넣고 형은 본관 상설전시를 보는 식으로 나누면 두 아이 모두 만족합니다.", "tipYounger": "딱 맞는 연령대입니다. 손으로 만지고 입어보는 코너가 중심입니다.", "tipOlder": "체험실보다 본관 상설전시(대전의 근현대사)를 권합니다. 학교 사회 교과와 바로 연결됩니다.", "tips": ["월별로 예약이 열립니다. 이번 달 회차가 남아 있는지 먼저 확인하세요.", "박물관 야외에 넓은 잔디밭이 있어 관람 후 뛰어놀기 좋습니다."], "caution": "체험실 대상 연령이 정해져 있어 11살은 입장 대상이 아닐 수 있습니다. 예약 전 연령 조건을 확인하세요.", "link": "https://www.daejeon.go.kr/his/index.do", "linkLabel": "대전시립박물관 예약·안내"}, {"id": "wood", "region": "대전", "always": true, "title": "대전목재문화체험장 목공 체험", "place": "대전 서구 장안동", "cost": "프로그램별 소액", "rsv": "예약 필수", "hours": "프로그램 회차별", "stay": "1.5~2시간", "types": ["만들기"], "younger": 3, "older": 3, "hook": "진짜 톱과 사포를 쓰는 목공방. 완성품을 들고 나온다는 점에서 만족도가 확실합니다.", "why": "난이도가 프로그램별로 나뉘어 있어 8살과 11살이 각자 다른 수준의 작품을 만들 수 있습니다. 결과물이 남는 활동이라 ‘돈 아깝지 않은 체험’ 쪽에 확실히 속합니다.", "tipYounger": "조립·사포질 중심의 저학년 키트를 고르세요. 못 박기까지는 도움이 필요합니다.", "tipOlder": "측정과 톱질이 들어간 중급 프로그램이 가능합니다. 도면을 보고 만드는 경험이 남습니다.", "tips": ["대전시 통합예약(OK예약서비스)에서도 회차를 확인할 수 있습니다.", "장태산자연휴양림과 같은 방향이라 묶어서 하루 코스로 짤 수 있습니다."], "caution": "인기 회차는 오픈과 동시에 마감됩니다. 예약 오픈일을 미리 확인하세요.", "link": "https://www.daejeon.go.kr/wood/index.do", "linkLabel": "목재문화체험장 예약하기"}, {"id": "kidsci", "region": "대전", "always": true, "title": "국립중앙과학관 어린이과학관", "place": "대전 유성구 대덕대로", "cost": "저렴한 유료", "rsv": "예약 필수", "hours": "화–일 (월요일 휴관)", "stay": "1.5시간", "types": ["과학"], "younger": 3, "older": 2, "hook": "‘공존의 과학’을 주제로 자연·사람·기계를 놀이로 풀어낸 상설 체험관.", "why": "회차별 정원제라 주말에도 비교적 여유롭게 볼 수 있습니다. 8살에게는 대전에서 가장 확실한 선택지입니다.", "tipYounger": "연령대가 딱 맞습니다. 스스로 조작하는 전시물이 대부분입니다.", "tipOlder": "단독으로는 다소 쉽습니다. 특별전이나 상설전시관과 묶어 반나절 코스로 짜는 편이 좋습니다.", "tips": ["6세 이하 동반이면 꿈아띠체험관이 별도로 있습니다.", "예약은 통합예약 누리집에서 회차별로 열립니다."], "caution": "현장 발권이 되지 않는 회차가 있습니다. 반드시 예약 후 방문하세요.", "link": "https://rsvn.science.go.kr/nsm/exbtrsvn/dspy/0021", "linkLabel": "어린이과학관 예약하기"}, {"id": "geo", "region": "대전", "always": true, "title": "지질박물관 (한국지질자원연구원)", "place": "대전 유성구 과학로", "cost": "무료", "rsv": "자유 관람", "hours": "화–일 (월요일·공휴일 휴관 확인)", "stay": "1시간", "types": ["과학", "자연"], "younger": 3, "older": 3, "hook": "공룡 골격과 운석, 형광 광물. 무료인데 남매가 나란히 좋아하는 몇 안 되는 곳입니다.", "why": "대덕연구단지 안에 있는 지질표본 전문 박물관입니다. 실물 표본 중심이라 8살은 크기와 반짝임으로, 11살은 지질 시대와 분류로 즐깁니다. 규모가 크지 않아 한 시간이면 충분해 다른 일정에 붙이기 좋습니다.", "tipYounger": "공룡 전시실과 형광 광물 방이 하이라이트입니다.", "tipOlder": "암석 분류와 지질 시대 연표를 따라가면 과학 교과와 바로 이어집니다. 화석 관찰 활동지를 요청해보세요.", "tips": ["국립중앙과학관과 차로 5분 거리입니다. 같은 날 묶기 좋습니다.", "단체 해설은 사전 신청이 필요합니다."], "caution": "연구원 부지 안이라 주차 안내를 미리 확인하세요.", "link": "https://www.kigam.re.kr/museum/", "linkLabel": "지질박물관 관람안내"}, {"id": "money", "region": "대전", "always": true, "title": "화폐박물관 (한국조폐공사)", "place": "대전 유성구 과학로", "cost": "무료", "rsv": "자유 관람 (해설 예약)", "hours": "화–일 (월요일 휴관)", "stay": "1시간", "types": ["역사", "전시"], "younger": 2, "older": 3, "hook": "우리나라 최초의 화폐 전문 박물관. 위조 방지 기술 코너에서 11살이 붙잡힙니다.", "why": "돈이라는 소재가 아이들에게 이미 친숙해서 도입이 쉽습니다. 화폐 제조 과정과 위조 방지 기술은 초4 수준에서 이해 가능하면서도 ‘몰랐던 것’이라 반응이 좋습니다.", "tipYounger": "세계 각국 지폐 도안 구경과 옛날 돈 만져보기 코너 정도로 충분합니다.", "tipOlder": "홀로그램·미세문자 같은 위조 방지 기술 전시가 핵심입니다. 실제 지폐를 꺼내 대조해보게 하세요.", "tips": ["지질박물관·국립중앙과학관과 모두 가깝습니다. 대덕연구단지 하루 코스로 묶을 수 있습니다.", "전시 해설은 사전 예약제로 운영됩니다."], "caution": "단체 관람이 몰리는 평일 오전은 피하는 편이 좋습니다.", "link": "https://museum.komsco.com/", "linkLabel": "화폐박물관 관람안내"}, {"id": "hbem", "region": "대전", "always": true, "title": "한밭교육박물관", "place": "대전 동구 우암로", "cost": "무료", "rsv": "자유 관람", "hours": "화–일 (월요일 휴관)", "stay": "1시간", "types": ["역사", "전시"], "younger": 3, "older": 2, "hook": "옛 교실을 그대로 재현해둔 곳. 아이들이 나무 책상에 앉아보는 순간이 이 박물관의 전부이자 핵심입니다.", "why": "부모 세대의 학교를 아이가 직접 앉아보는 경험이 대화를 만듭니다. 무료이고 붐비지 않아 부담 없이 들르기 좋습니다. 독도 관련 전시 등 주제 전시도 수시로 열립니다.", "tipYounger": "옛날 교실·주판·풍금 같은 실물 체험이 재미의 대부분입니다.", "tipOlder": "교육 제도의 변화를 시대순으로 따라가는 구성이라 사회 교과와 연결됩니다.", "tips": ["건물 자체가 근대 문화유산입니다. 외관도 함께 보세요.", "월요일 휴관일에는 학교로 찾아가는 프로그램만 운영됩니다."], "caution": "규모가 작아 단독 목적지보다는 다른 일정에 붙이는 편이 좋습니다.", "link": "https://www.hbem.or.kr/kor.do", "linkLabel": "한밭교육박물관 안내"}, {"id": "dma", "region": "대전", "always": true, "title": "대전시립미술관 · 이응노미술관", "place": "대전 서구 둔산대로", "cost": "저렴한 유료 / 일부 무료", "rsv": "자유 관람", "hours": "화–일 (월요일 휴관, 3–10월 연장 개관)", "stay": "1.5~2시간", "types": ["전시"], "younger": 2, "older": 3, "hook": "둔산 대공원 안에 미술관 두 곳이 나란히 있습니다. 한 번에 두 전시를 볼 수 있는 배치.", "why": "대전시립미술관은 매년 어린이 기획전을 여는 곳이고, 이응노미술관은 문자추상이라는 명확한 주제가 있어 아이에게 설명하기 쉽습니다. 두 곳이 걸어서 몇 분 거리이고 한밭수목원과도 붙어 있어 하루 동선이 자연스럽게 나옵니다.", "tipYounger": "이응노의 글자 그림을 보고 자기 이름으로 따라 그려보게 하면 몰입합니다.", "tipOlder": "현재 기획전 주제를 미리 확인하고 가세요. 미디어아트 전시가 걸리면 반응이 특히 좋습니다.", "tips": ["한밭수목원이 바로 옆입니다. 미술관 → 수목원 산책 동선을 권합니다.", "현재 걸린 전시가 아이에게 맞는지 사이트에서 먼저 확인하세요."], "caution": "기획전 주제에 따라 아이 난이도 편차가 큽니다. 방문 전 확인이 필수입니다.", "link": "https://www.daejeon.go.kr/dma/index.do", "linkLabel": "대전시립미술관 전시일정"}, {"id": "garden", "region": "대전", "always": true, "title": "한밭수목원 & 대전곤충생태관", "place": "대전 서구 둔산대공원", "cost": "무료 (곤충생태관 소액)", "rsv": "숲해설 예약", "hours": "연중 (곤충생태관은 월요일 휴관 확인)", "stay": "2시간", "types": ["자연"], "younger": 3, "older": 2, "hook": "도심 한복판의 큰 수목원. 실내 곤충생태관이 붙어 있어 날씨에 상관없이 대안이 생깁니다.", "why": "무료이고 넓고 평지라 두 아이 체력 차이를 흡수합니다. 봄가을에는 그늘 없이도 걷기 좋고, 숲해설을 예약하면 그냥 산책이 관찰 활동으로 바뀝니다.", "tipYounger": "곤충생태관과 어린이 놀이터 조합이면 충분합니다.", "tipOlder": "숲해설을 예약해 식물 이름을 기록하며 걷게 하면 자유탐구 소재가 됩니다.", "tips": ["미술관 두 곳과 같은 공원 안에 있습니다.", "숲해설은 사전 예약제입니다.", "여름 물놀이장은 별도 예약제로 운영되며 시즌 종료 여부를 확인하세요."], "caution": "주차장이 주말 오후에 빠르게 찹니다.", "link": "https://www.daejeon.go.kr/gar/index.do", "linkLabel": "한밭수목원 안내·예약"}, {"id": "oworld", "region": "대전", "always": true, "title": "대전오월드 (동물원 + 놀이시설)", "place": "대전 중구 사정공원로", "cost": "유료 (통합권)", "rsv": "온라인 예매 가능", "hours": "계절별 상이", "stay": "반나절~하루", "types": ["자연", "축제"], "younger": 3, "older": 3, "hook": "동물원·놀이공원·플라워랜드가 한 부지에 있는 대전 대표 가족 나들이터.", "why": "놀이기구 키 제한과 무서움 정도에서 8살과 11살이 갈릴 수 있지만, 동물원 구역이 그 간극을 메워줍니다. 계절 이벤트가 자주 열려 재방문해도 새롭습니다.", "tipYounger": "동물원과 플라워랜드 위주로, 놀이기구는 키 제한을 미리 확인하세요.", "tipOlder": "놀이기구 강도가 맞는 나이입니다. 동생과 탈 수 있는 기구를 미리 골라두면 실랑이가 줍니다.", "tips": ["진행 중인 이벤트를 공식 사이트에서 먼저 확인하세요. 시즌 축제가 자주 열립니다.", "온라인 사전 예매가 현장 구매보다 저렴한 경우가 많습니다."], "caution": "놀이기구별 키 제한(대개 110cm/130cm)을 8살 기준으로 미리 확인하세요.", "link": "https://www.oworld.kr/", "linkLabel": "오월드 이벤트·예매"}, {"id": "aqua", "region": "대전", "always": true, "title": "대전엑스포아쿠아리움", "place": "대전 유성구 엑스포과학공원", "cost": "유료", "rsv": "온라인 예매 가능", "hours": "연중 (세부 시간 확인)", "stay": "1~1.5시간", "types": ["자연"], "younger": 3, "older": 2, "hook": "실내라 날씨에 영향받지 않습니다. 비 오는 주말의 확실한 대안.", "why": "엑스포과학공원 안에 있어 국립중앙과학관·한빛탑과 같은 권역입니다. 규모가 아주 크진 않지만 실내이고, 시즌 행사를 자주 엽니다.", "tipYounger": "먹이주기·터널 수조 등 눈으로 즐기는 요소가 많습니다.", "tipOlder": "단독으로는 짧게 끝납니다. 과학관이나 한빛탑 전망대와 묶으세요.", "tips": ["같은 공원 안 한빛탑 전망대에서 대전 시내가 내려다보입니다.", "시즌 행사 공지를 사이트 소식란에서 확인하세요."], "caution": "주말 오후는 대기가 깁니다. 온라인 예매를 권합니다.", "link": "https://djexpoaqua.com/", "linkLabel": "아쿠아리움 예매·안내"}, {"id": "gjmuseum", "region": "공주·부여", "always": true, "title": "국립공주박물관", "place": "공주시 관광단지길", "cost": "무료", "rsv": "자유 관람 (체험 일부 예약)", "hours": "화–일 (월요일 휴관)", "stay": "1.5~2시간", "types": ["역사", "전시"], "younger": 3, "older": 3, "hook": "무령왕릉 출토품이 모여 있는 곳. 금제 관식과 진묘수 앞에서는 8살도 멈춰 섭니다.", "why": "백제 유물의 실물 밀도가 가장 높은 박물관입니다. 어린이 체험 공간이 따로 있어 두 아이의 관람 속도가 달라도 감당됩니다. 무료이고, 백제문화제 전에 다녀오면 축제가 훨씬 잘 읽힙니다.", "tipYounger": "어린이박물관 코너에서 유물 퍼즐·탁본 체험을 먼저 하고 본관으로 넘어가세요.", "tipOlder": "무령왕릉 발굴 이야기 자체가 흥미로운 서사입니다. 지석과 진묘수의 역할을 짚어주면 기억에 남습니다.", "tips": ["공산성·송산리 고분군과 묶어 공주 반나절 코스로 만드세요.", "대전에서 차로 약 50분입니다."], "caution": "어린이 체험 프로그램은 회차 예약제인 경우가 많습니다. 방문 전 확인하세요.", "link": "https://gongju.museum.go.kr/", "linkLabel": "국립공주박물관 안내"}, {"id": "bymuseum", "region": "공주·부여", "always": true, "title": "국립부여박물관", "place": "부여군 금성로", "cost": "무료", "rsv": "방문 전 확인 필수", "hours": "화–일 (월요일 휴관)", "stay": "1~1.5시간", "types": ["역사", "전시"], "younger": 2, "older": 3, "hook": "백제금동대향로가 있는 곳. 다만 지금은 상설전시가 12년 만의 새단장 공사 중입니다.", "why": "사비 백제와 청동기 송국리 문화를 다루는 상설전시가 12월에 새로 공개될 예정입니다. 즉 지금 가면 볼 수 있는 범위가 제한적일 수 있어, 이 카드는 ‘백제문화제 때 들르기 전에 반드시 확인하라’는 의미의 카드입니다.", "tipYounger": "재단장 후 방문을 권합니다. 지금은 야외 석조 유물 정도입니다.", "tipOlder": "금동대향로의 도상을 미리 알고 가면 관람이 완전히 달라집니다. 온라인 백제문화플랫폼으로 예습이 가능합니다.", "tips": ["백제문화플랫폼에서 소장품을 온라인으로 미리 볼 수 있습니다.", "정림사지와 도보권입니다."], "caution": "상설전시실 새단장으로 관람 범위가 제한될 수 있고, 재개관은 2026년 12월로 예정되어 있습니다. 반드시 방문 전에 운영 현황을 확인하세요.", "link": "https://buyeo.museum.go.kr/", "linkLabel": "국립부여박물관 운영 확인"}, {"id": "gyeryong", "region": "공주·부여", "always": true, "title": "계룡산국립공원 자연관찰", "place": "공주시 반포면 동학사 지구", "cost": "입장 무료 (주차 유료)", "rsv": "자유 / 해설 프로그램 예약", "hours": "연중 (탐방안내소 운영시간 확인)", "stay": "반나절", "types": ["자연"], "younger": 2, "older": 3, "hook": "대전 바로 옆의 국립공원. 9~10월은 계곡길이 가장 걷기 좋은 때입니다.", "why": "동학사 계곡길은 경사가 완만해 8살도 왕복 가능합니다. 국립공원 탐방안내소에서 자연관찰 프로그램과 활동지를 운영하고, 반달가슴곰 복원 사업 같은 전시도 볼 수 있습니다.", "tipYounger": "탐방안내소 전시와 계곡 초입까지만 걸어도 충분합니다. 무리한 등반은 피하세요.", "tipOlder": "동학사까지 왕복이 가능한 체력대입니다. 국립공원 스탬프 투어를 목표로 주면 동기가 생깁니다.", "tips": ["대전 유성에서 차로 30분 이내입니다.", "10월 중순 이후 단풍철에는 주차가 매우 혼잡합니다. 9월이 오히려 여유롭습니다."], "caution": "등산로 진입 시 아이 체력에 맞는 구간을 미리 정하세요. 계곡 물가는 미끄럽습니다.", "link": "https://www.knps.or.kr/", "linkLabel": "국립공원공단 탐방 정보"}, {"id": "sjna", "region": "세종", "always": true, "title": "국립세종수목원", "place": "세종시 수목원로", "cost": "유료 (어린이 할인)", "rsv": "온라인 예매 권장", "hours": "화–일 (월요일 휴관)", "stay": "2~3시간", "types": ["자연"], "younger": 3, "older": 3, "hook": "국내 최대 규모의 사계절 유리온실. 한국전통정원과 습지 관찰로가 함께 있습니다.", "why": "국내 최초의 도심형 국립수목원이라 동선이 잘 정리돼 있고 걷기 편합니다. 지중해·열대 온실이 실내라 날씨가 나빠도 방문할 수 있고, 청류지원 습지에서는 실제 생물 관찰이 가능합니다.", "tipYounger": "열대온실의 큰 잎과 폭포, 습지의 물고기·잠자리가 반응이 좋습니다.", "tipOlder": "기후대별 식물 구분과 한국전통정원의 구조를 짚어주면 관찰 활동이 됩니다.", "tips": ["세종한글축제와 같은 세종 권역입니다. 오전 수목원 → 오후 축제가 가능합니다.", "입장권은 한국수목원정원관리원 통합예약시스템에서 예매합니다.", "대전에서 차로 30~40분입니다."], "caution": "넓어서 전 구역을 다 걸으면 8살에겐 무리입니다. 온실 + 한 구역 정도로 계획하세요.", "link": "https://www.sjna.or.kr/", "linkLabel": "국립세종수목원 안내·예매"}, {"id": "jikji", "region": "청주", "always": true, "title": "청주고인쇄박물관 (직지)", "place": "청주시 흥덕구 직지대로, 흥덕사지", "cost": "무료", "rsv": "체험 프로그램 예약", "hours": "화–일 (월요일 휴관)", "stay": "1.5시간", "types": ["역사", "만들기"], "younger": 2, "older": 3, "hook": "현존 최고(最古) 금속활자본 직지가 만들어진 흥덕사 터. 금속활자 인쇄를 직접 찍어볼 수 있습니다.", "why": "‘세계에서 가장 오래된’이라는 사실이 아이에게 강한 인상을 남깁니다. 활자를 골라 판을 짜고 먹을 묻혀 찍는 체험은 손으로 하는 활동이라 8살도 따라올 수 있고, 인쇄술의 의미는 11살이 이해합니다.", "tipYounger": "인쇄 체험 위주로 도세요. 전시 패널은 길어서 건너뛰어도 됩니다.", "tipOlder": "금속활자와 목판의 차이, 구텐베르크보다 앞섰다는 사실이 핵심 포인트입니다.", "tips": ["대전에서 차로 약 1시간입니다.", "체험 프로그램은 회차·정원제인 경우가 많아 예약을 확인하세요.", "매년 가을 직지문화축제가 이곳에서 열립니다."], "caution": "체험 재료 소진 시 조기 마감될 수 있습니다.", "link": "https://www.cheongju.go.kr/jikjiworld/index.do", "linkLabel": "청주고인쇄박물관 안내"}, {"id": "cjmuseum", "region": "청주", "always": true, "title": "국립청주박물관", "place": "청주시 상당구 명암로", "cost": "무료", "rsv": "자유 관람 (체험 예약)", "hours": "화–일 (월요일 휴관)", "stay": "1.5시간", "types": ["역사", "전시"], "younger": 3, "older": 3, "hook": "우암산 자락의 조용한 국립박물관. 어린이 체험 공간과 야외 산책로가 함께 있습니다.", "why": "충북 지역 금속 문화 유물이 중심입니다. 건물이 산자락 지형을 따라 지어져 관람 자체가 산책처럼 느껴지고, 야외 공간이 넓어 아이들이 지치면 나가서 쉴 수 있습니다. 무료입니다.", "tipYounger": "어린이 체험실과 야외 공간을 섞어 도세요.", "tipOlder": "청동기·철기 유물이 강한 편입니다. 학교에서 배운 시대 구분과 실물을 맞춰보게 하세요.", "tips": ["청주고인쇄박물관과 같은 날 묶기에는 거리가 있습니다. 하나만 고르는 편이 낫습니다.", "어린이 체험 프로그램은 예약제로 운영됩니다."], "caution": "대전에서 차로 약 1시간입니다. 왕복 이동을 감안해 하루를 잡으세요.", "link": "https://cheongju.museum.go.kr/www/index.do", "linkLabel": "국립청주박물관 안내"}, {"id": "okrsv", "region": "대전", "always": true, "kind": "channel", "title": "대전시 통합예약 OK예약서비스", "place": "온라인", "cost": "프로그램별", "rsv": "예약 창구", "hours": "연중", "stay": "—", "types": ["만들기", "자연"], "younger": 3, "older": 3, "hook": "대전시 산하 시설의 체험 프로그램 예약이 한곳에 모여 있습니다. 매달 새 회차를 확인하는 용도.", "why": "이 페이지에 실린 개별 행사 외에도, 수목원 숲해설·목공 체험·박물관 체험실처럼 월 단위로 열리는 회차가 여기서 한 번에 보입니다. 매월 초에 한 번 훑는 습관을 들이면 새 프로그램을 놓치지 않습니다.", "tipYounger": "저학년 대상 프로그램이 별도로 분류되어 있는 경우가 많습니다.", "tipOlder": "초등 고학년 대상 과학·공작 프로그램을 필터로 찾아보세요.", "tips": ["인기 프로그램은 예약 오픈 당일에 마감됩니다. 오픈일을 확인해두세요."], "caution": "기관별로 별도 예약 시스템을 쓰는 곳도 있습니다(과학관은 자체 통합예약 누리집).", "link": "https://ok.daejeon.go.kr/", "linkLabel": "OK예약서비스 열기"}, {"id": "djfvu", "region": "대전", "always": true, "kind": "channel", "title": "대전시 행사안내 · 대전관광 축제달력", "place": "온라인", "cost": "—", "rsv": "공지 창구", "hours": "연중", "stay": "—", "types": ["축제", "전시"], "younger": 2, "older": 2, "hook": "이 페이지가 다루지 못한 새 행사를 직접 확인하는 곳. 매주 갱신됩니다.", "why": "이 목록은 데이터 갱신일 기준으로 정리한 것입니다. 이후 새로 뜨는 대전 지역 공연·전시·행사는 시 공식 행사안내와 대전관광 축제 페이지에서 가장 먼저 올라옵니다.", "tipYounger": "‘어린이’ 키워드로 검색하면 대상 연령이 표시된 프로그램을 추릴 수 있습니다.", "tipOlder": "공연·전시 카테고리에 초등 고학년 대상 프로그램이 종종 올라옵니다.", "tips": ["매주 초에 한 번 확인하면 이 페이지의 ‘이번 주’ 목록을 직접 갱신할 수 있습니다."], "caution": "", "link": "https://www.daejeon.go.kr/fvu/index.do", "linkLabel": "대전시 행사안내 열기"}]};
+</script>
+<script>
+/* ============================================================
+   남매 나들이 달력 — app
+   Every bucket ("이번 주" / "이번 달" …) is derived from the
+   current date in Asia/Seoul at page load, so the page rolls
+   over on its own each day without a rebuild.
+   ============================================================ */
+
+const DATA_URL = 'data/events.json';
+const WD = ['일', '월', '화', '수', '목', '금', '토'];
+
+/* ── date helpers (Asia/Seoul, date-only, ISO strings) ── */
+function seoulNow() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).formatToParts(new Date());
+  const get = t => parts.find(p => p.type === t).value;
+  return new Date(Date.UTC(+get('year'), +get('month') - 1, +get('day')));
+}
+const ymd = d => d.toISOString().slice(0, 10);
+const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
+const parseYmd = s => new Date(s + 'T00:00:00Z');
+const dayDiff = (a, b) => Math.round((parseYmd(b) - parseYmd(a)) / 86400000);
+function fmt(iso) { const d = parseYmd(iso); return `${d.getUTCMonth() + 1}.${d.getUTCDate()} ${WD[d.getUTCDay()]}`; }
+function fmtLong(d) { return `${d.getUTCFullYear()}.${String(d.getUTCMonth() + 1).padStart(2, '0')}.${String(d.getUTCDate()).padStart(2, '0')} (${WD[d.getUTCDay()]})`; }
+
+/* 세는 나이는 1월 1일에, 학년은 3월 1일에 올라간다.
+   두 기준이 다르므로 따로 계산한다. */
+function describeKid(kid, c) {
+  const age = c.year - kid.birthYear + 1;              // 세는 나이
+  const grade = c.schoolYear - (kid.birthYear + 7) + 1; // 입학 학년도 = 출생연도 + 7
+  let level;
+  if (grade < 1) level = '미취학';
+  else if (grade <= 6) level = `초${grade}`;
+  else if (grade <= 9) level = `중${grade - 6}`;
+  else if (grade <= 12) level = `고${grade - 9}`;
+  else level = '졸업';
+  return { ...kid, age, grade, level, label: `${age}살`, full: `${age}살 · ${level}` };
+}
+
+function buildCtx() {
+  const today = seoulNow();
+  const dow = today.getUTCDay();                 // 0 Sun … 6 Sat
+  const monday = addDays(today, dow === 0 ? -6 : 1 - dow);
+  const sunday = addDays(monday, 6);
+  const monthEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 1, 0));
+  const nextEnd = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth() + 2, 0));
+  return {
+    todayDate: today,
+    today: ymd(today), weekStart: ymd(monday), weekEnd: ymd(sunday),
+    monthEnd: ymd(monthEnd), nextEnd: ymd(nextEnd),
+    year: today.getUTCFullYear(),
+    // 학년도는 3월에 시작한다. 1~2월은 아직 지난 학년도.
+    schoolYear: today.getUTCFullYear() - (today.getUTCMonth() + 1 < 3 ? 1 : 0),
+    thisMonth: today.getUTCMonth() + 1,
+    nextMonth: (today.getUTCMonth() + 1) % 12 + 1
+  };
+}
+
+/* ── bucketing ─────────────────────────────────────────── */
+function bucketOf(ev, c) {
+  if (ev.always) return 'always';
+  const end = ev.end || ev.start;
+  if (end < c.today) return 'past';
+  if (ev.start <= c.weekEnd) return 'week';      // starts this week, or already running
+  if (ev.start <= c.monthEnd) return 'month';
+  if (ev.start <= c.nextEnd) return 'next';
+  return 'later';
+}
+
+/* Next dates a recurring event actually opens, from today on. */
+function nextOccurrences(ev, c, limit) {
+  if (!ev.recur) return [];
+  const out = [];
+  const stop = ev.end || ev.start;
+  let d = parseYmd(c.today > ev.start ? c.today : ev.start);
+  while (ymd(d) <= stop && out.length < limit) {
+    const s = ymd(d);
+    if (ev.recur.weekdays.includes(d.getUTCDay()) && !(ev.recur.exclude || []).includes(s)) out.push(s);
+    d = addDays(d, 1);
+  }
+  return out;
+}
+
+function whenLabel(ev, c) {
+  if (ev.always) return ev.kind === 'channel' ? '상시 · 예약/공지 창구' : '상설 운영';
+  const end = ev.end || ev.start;
+  if (ev.recur) {
+    const nx = nextOccurrences(ev, c, 2);
+    if (nx.length) return `${ev.recur.label} · 다음 ${nx.map(fmt).join(' · ')}`;
+    return `${ev.recur.label} · ${fmt(ev.start)} – ${fmt(end)}`;
+  }
+  if (end === ev.start) return fmt(ev.start);
+  return `${fmt(ev.start)} – ${fmt(end)}`;
+}
+
+function ddayOf(ev, c) {
+  if (ev.always) return { cls: '', text: '상시' };
+  const end = ev.end || ev.start;
+  if (end < c.today) return { cls: 'past', text: '종료' };
+  if (ev.start <= c.today) {
+    const left = dayDiff(c.today, end);
+    if (ev.recur) {
+      const nx = nextOccurrences(ev, c, 1);
+      return nx.length
+        ? { cls: nx[0] === c.today ? 'live' : 'soon', text: nx[0] === c.today ? '오늘 열림' : `다음 D-${dayDiff(c.today, nx[0])}` }
+        : { cls: '', text: '회차 종료' };
+    }
+    return { cls: 'live', text: left === 0 ? '오늘 마지막' : `진행 중 · ${left}일 남음` };
+  }
+  const d = dayDiff(c.today, ev.start);
+  return { cls: d <= 7 ? 'soon' : '', text: `D-${d}` };
+}
+
+/* ── render ────────────────────────────────────────────── */
+const state = { region: 'all', type: 'all', age: 'all', q: '', showPast: false };
+let DB = null, CTX = null, KIDS = [];
+
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+const bars = n => '<span class="bars">' + [1, 2, 3].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('') + '</span>';
+
+function bandsFor(c) {
+  return [
+    { key: 'week', title: '이번 주', range: `${fmt(c.weekStart)} – ${fmt(c.weekEnd)}`,
+      note: '오늘부터 이번 주 일요일까지 실제로 문이 열려 있는 것들입니다. 하루만 쓸 수 있다면 여기서 고르세요.' },
+    { key: 'month', title: `${c.thisMonth}월 안에`, range: `${fmt(c.weekEnd)} 이후 – 이달 말`,
+      note: '날짜가 확정된 이달 남은 일정입니다. 예약이 필요한 것부터 먼저 잡으세요.' },
+    { key: 'next', title: `${c.nextMonth}월 큰 행사`, range: '다음 달',
+      note: '지금 계획을 잡아둬야 하는 다음 달 일정입니다. 체험 프로그램은 사전예약분이 먼저 마감됩니다.' },
+    { key: 'later', title: '그 이후', range: '두 달 뒤부터',
+      note: '멀리 잡아둘 일정입니다.' },
+    { key: 'always', title: '언제든 가능', range: '상설 운영',
+      note: '날짜가 안 맞거나 비가 올 때의 목록입니다. 무료이면서 남매가 함께 즐길 수 있는 곳을 앞쪽에 두었습니다.' }
+  ];
+}
+
+function match(ev) {
+  if (state.region !== 'all' && ev.region !== state.region) return false;
+  if (state.type !== 'all' && !ev.types.includes(state.type)) return false;
+  if (state.age === 'both' && !(ev.younger === 3 && ev.older === 3)) return false;
+  if (state.age === 'younger' && !(ev.younger >= 3 && ev.younger > ev.older)) return false;
+  if (state.age === 'older' && !(ev.older >= 3 && ev.older > ev.younger)) return false;
+  if (state.q) {
+    const hay = [ev.title, ev.place, ev.hook, ev.region, ev.types.join(' ')].join(' ').toLowerCase();
+    if (!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+
+function cardHTML(ev) {
+  const rc = `var(${DB.regions[ev.region]})`;
+  const dd = ddayOf(ev, CTX);
+  const rsvCls = ev.rsv.includes('필수') ? 'tag rsv' : ev.rsv.includes('확인') ? 'tag warn' : 'tag';
+  return `<article class="card ${ev.always ? '' : 'dated'} ${dd.cls === 'past' ? 'past' : ''}" style="--rc:${rc}" id="card-${ev.id}">
+    <div class="chead"><span class="when">${esc(whenLabel(ev, CTX))}</span><span class="region">${esc(ev.region)}</span></div>
+    <span class="dday ${dd.cls === 'past' ? '' : dd.cls}">${esc(dd.text)}</span>
+    <h3>${esc(ev.title)}</h3>
+    <p class="hook">${esc(ev.hook)}</p>
+    <div class="meta">
+      <div><span class="k">장소</span><span>${esc(ev.place)}</span></div>
+      <div><span class="k">비용</span><span>${esc(ev.cost)}</span></div>
+    </div>
+    <div class="fits">
+      ${KIDS.map(k => `<span class="fit"><span class="who">${esc(k.label)}</span>${bars(ev[k.key])}</span>`).join('')}
+    </div>
+    <div class="tags">${ev.types.map(t => `<span class="tag">${esc(t)}</span>`).join('')}<span class="${rsvCls}">${esc(ev.rsv)}</span></div>
+    <div class="acts">
+      <button class="btn" type="button" data-open="${esc(ev.id)}">요약 보기</button>
+      <a class="btn solid" href="${esc(ev.link)}" target="_blank" rel="noopener noreferrer">공식 사이트 ↗</a>
+    </div>
+  </article>`;
+}
+
+function render() {
+  const host = document.getElementById('bands');
+  const buckets = {};
+  DB.events.forEach(ev => { (buckets[bucketOf(ev, CTX)] ||= []).push(ev); });
+
+  let shown = 0, html = '';
+  bandsFor(CTX).forEach(b => {
+    const items = (buckets[b.key] || []).filter(match);
+    shown += items.length;
+    if (!items.length) return;
+    html += `<section class="band">
+      <div class="bandhead"><h2>${esc(b.title)}</h2><span class="range">${esc(b.range)}</span></div>
+      <p class="bandnote">${esc(b.note)}</p>
+      <div class="grid">${items.map(cardHTML).join('')}</div>
+    </section>`;
+  });
+
+  const past = (buckets.past || []).filter(match);
+  if (past.length) {
+    html += `<div class="pastline"><span>이미 끝난 행사 ${past.length}건이 목록에서 빠져 있습니다.</span>
+      <button type="button" id="togglePast">${state.showPast ? '숨기기' : '보기'}</button></div>`;
+    if (state.showPast) html += `<div class="grid" style="margin-top:14px">${past.map(cardHTML).join('')}</div>`;
+  }
+  if (!shown && !past.length) html += '<div class="empty">조건에 맞는 곳이 없습니다. 필터를 하나 풀어보세요.</div>';
+
+  host.innerHTML = html;
+  document.getElementById('count').textContent = `${shown} / ${DB.events.length}곳`;
+
+  ['week', 'month', 'next', 'always'].forEach(k => {
+    const el = document.getElementById('t-' + k);
+    if (el) el.textContent = (buckets[k] || []).length;
+  });
+  document.getElementById('lbl-month').textContent = `${CTX.thisMonth}월 안에`;
+  document.getElementById('lbl-next').textContent = `${CTX.nextMonth}월 큰 행사`;
+  const short = iso => { const d = parseYmd(iso); return `${d.getUTCMonth() + 1}.${d.getUTCDate()}`; };
+  document.getElementById('lbl-week').textContent = `이번 주 ${short(CTX.weekStart)}–${short(CTX.weekEnd)}`;
+}
+
+/* ── highlights: derived, so they never go stale ───────── */
+function renderPicks() {
+  const upcoming = DB.events
+    .filter(ev => !ev.always && ['week', 'month', 'next'].includes(bucketOf(ev, CTX)))
+    .filter(ev => ev.younger + ev.older >= 5)
+    .sort((a, b) => (a.start === b.start ? (b.younger + b.older) - (a.younger + a.older) : a.start < b.start ? -1 : 1))
+    .slice(0, 4);
+  const list = upcoming.length ? upcoming : DB.events.filter(e => e.always).slice(0, 4);
+  document.getElementById('picks').innerHTML = list.map(ev => `<li>
+      <span class="d">${esc(ev.always ? '상시' : whenLabel(ev, CTX).split(' · ')[0])}</span>
+      <span class="t"><button class="linkish" type="button" data-open="${esc(ev.id)}">${esc(ev.title)}</button>
+      <span class="why">${esc(ev.hook)}</span></span>
+    </li>`).join('');
+}
+
+/* ── modal ─────────────────────────────────────────────── */
+const scrim = document.getElementById('scrim');
+const sheet = document.getElementById('sheet');
+let lastFocus = null;
+
+function openSheet(id) {
+  const ev = DB.events.find(x => x.id === id);
+  if (!ev) return;
+  lastFocus = document.activeElement;
+  const rc = `var(${DB.regions[ev.region]})`;
+  const dd = ddayOf(ev, CTX);
+  const occ = ev.recur ? nextOccurrences(ev, CTX, 6) : [];
+  sheet.innerHTML = `
+    <div class="sheet-top" style="--rc:${rc}">
+      <button class="close" type="button" aria-label="닫기" data-close>&times;</button>
+      <div class="when" style="color:${rc}">${esc(whenLabel(ev, CTX))} · ${esc(ev.region)}</div>
+      <h2 id="sheet-title">${esc(ev.title)}</h2>
+      <p>${esc(ev.hook)}</p>
+    </div>
+    <div class="sheet-body">
+      <dl class="facts">
+        <div><dt>상태</dt><dd>${esc(dd.text)}</dd></div>
+        <div><dt>비용</dt><dd>${esc(ev.cost)}</dd></div>
+        <div><dt>예약</dt><dd>${esc(ev.rsv)}</dd></div>
+        <div><dt>운영</dt><dd>${esc(ev.hours)}</dd></div>
+        <div><dt>머무는 시간</dt><dd>${esc(ev.stay)}</dd></div>
+        <div><dt>장소</dt><dd>${esc(ev.place)}</dd></div>
+      </dl>
+      ${occ.length ? `<div class="blk"><h4>남은 회차</h4><p>${occ.map(fmt).join(' · ')}${occ.length === 6 ? ' …' : ''}</p></div>` : ''}
+      <div class="blk"><h4>왜 이 남매에게 맞나</h4><p>${esc(ev.why)}</p></div>
+      <div class="blk"><h4>아이별 포인트</h4>
+        ${KIDS.map(k => `<div class="kid"><span class="badge">${esc(k.full)}</span><p>${esc(ev[k.tipKey])}</p></div>`).join('')}
+      </div>
+      ${ev.tips && ev.tips.length ? `<div class="blk"><h4>가기 전에</h4><ul class="tiplist">${ev.tips.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : ''}
+      ${ev.caution ? `<div class="blk"><div class="caution"><strong>확인할 것 · </strong>${esc(ev.caution)}</div></div>` : ''}
+    </div>
+    <div class="sheet-foot">
+      <a class="btn solid" href="${esc(ev.link)}" target="_blank" rel="noopener noreferrer">${esc(ev.linkLabel)} ↗</a>
+      <button class="btn" type="button" data-close>닫기</button>
+      <span class="src">${esc(ev.link)}</span>
+    </div>`;
+  scrim.hidden = false;
+  document.body.style.overflow = 'hidden';
+  sheet.querySelector('.close').focus();
+}
+function closeSheet() {
+  scrim.hidden = true;
+  document.body.style.overflow = '';
+  if (lastFocus) lastFocus.focus();
+}
+
+/* ── wiring ────────────────────────────────────────────── */
+document.addEventListener('click', e => {
+  const open = e.target.closest('[data-open]');
+  if (open) { openSheet(open.dataset.open); return; }
+  if (e.target.closest('[data-close]') || e.target === scrim) { closeSheet(); return; }
+  if (e.target.id === 'togglePast') { state.showPast = !state.showPast; render(); return; }
+  const chip = e.target.closest('.chip');
+  if (chip) {
+    const f = chip.dataset.f;
+    document.querySelectorAll(`.chip[data-f="${f}"]`).forEach(o => o.setAttribute('aria-pressed', 'false'));
+    chip.setAttribute('aria-pressed', 'true');
+    state[f] = chip.dataset.v;
+    render();
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !scrim.hidden) closeSheet(); });
+document.getElementById('q').addEventListener('input', e => { state.q = e.target.value.trim().toLowerCase(); render(); });
+
+/* ── boot ──────────────────────────────────────────────── */
+(async function boot() {
+  CTX = buildCtx();
+  document.getElementById('today').textContent = fmtLong(CTX.todayDate);
+  if (window.__EVENTS__) {
+    DB = window.__EVENTS__;                                     // single-file build
+  } else {
+    try {
+      const res = await fetch(DATA_URL, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      DB = await res.json();
+    } catch (err) {
+      document.getElementById('bands').innerHTML =
+        '<div class="empty">행사 데이터를 불러오지 못했습니다. data/events.json 파일이 같은 폴더에 있는지 확인해 주세요.<br>' +
+        '(로컬에서 file:// 로 열면 브라우저 보안 정책 때문에 막힙니다 — README의 로컬 실행 방법을 참고하세요.)</div>';
+      return;
+    }
+  }
+  // 나이·학년은 저장하지 않고 출생연도에서 매번 계산한다.
+  // 1월 1일이 지나면 나이가, 3월 1일이 지나면 학년이 저절로 올라간다.
+  KIDS = DB.meta.kids.map(k => ({
+    ...describeKid(k, CTX),
+    tipKey: k.key === 'younger' ? 'tipYounger' : 'tipOlder'
+  }));
+  renderKidCopy();
+
+  const chips = document.getElementById('region-chips');
+  chips.insertAdjacentHTML('beforeend', Object.keys(DB.regions).map(r =>
+    `<button class="chip" data-f="region" data-v="${esc(r)}" aria-pressed="false"><span class="dot" style="background:var(${DB.regions[r]})"></span>${esc(r)}</button>`
+  ).join(''));
+  document.getElementById('updated').textContent = DB.meta.updated.replace(/-/g, '.');
+  renderPicks();
+  render();
+})();
+
+/* 아이 나이가 나오는 자리는 전부 여기서 한 번에 채운다. */
+function renderKidCopy() {
+  const older = KIDS.find(k => k.key === 'older');
+  const younger = KIDS.find(k => k.key === 'younger');
+
+  document.getElementById('kid-intro').innerHTML =
+    `${esc(older.level)} ${esc(older.role)}(${esc(older.label)})과 ` +
+    `${esc(younger.level)} ${esc(younger.role)}(${esc(younger.label)})이 <em>같이</em> ` +
+    `재미있어할 만한 것만 골랐습니다.`;
+
+  document.getElementById('q').insertAdjacentHTML('beforebegin',
+    KIDS.map(k => `<button class="chip" data-f="age" data-v="${esc(k.key)}" aria-pressed="false">${esc(k.label)} 위주</button>`).join(''));
+}
+
+</script>

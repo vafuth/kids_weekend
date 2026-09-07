@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>남매 나들이 달력</title>
+<meta name="description" content="대전·세종·공주·부여·청주에서 초등 남매가 함께 즐길 만한 체험·행사·전시. 아이별 난이도와 예약 링크 포함.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#1B5E52">
+<meta property="og:title" content="남매 나들이 달력">
+<meta property="og:description" content="대전 근교에서 남매와 갈 만한 곳. 이번 주·이번 달 기준으로 매일 자동 정리됩니다.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗓️</text></svg>">
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">
+    <span>대전 · 세종 · 공주 · 부여 · 청주</span>
+    <span class="sep">·</span>
+    <b id="today">—</b>
+  </div>
+  <h1>이번 주, 이번 달 남매 나들이</h1>
+  <p class="dek"><span id="kid-intro">두 아이가 <em>같이</em> 재미있어할 만한 것만 골랐습니다.</span> 대전에서 차로 1시간 안쪽. 카드마다 아이별 난이도와 흥미 포인트, 그리고 예약·공식 사이트로 바로 가는 버튼이 있습니다.</p>
+
+  <div class="brief">
+    <div class="brief-l">
+      <h2>한눈에 보기</h2>
+      <div class="tallies">
+        <div class="tally"><span class="n" id="t-week">–</span><span class="l" id="lbl-week">이번 주</span></div>
+        <div class="tally"><span class="n" id="t-month">–</span><span class="l" id="lbl-month">이번 달</span></div>
+        <div class="tally"><span class="n" id="t-next">–</span><span class="l" id="lbl-next">다음 달</span></div>
+        <div class="tally"><span class="n" id="t-always">–</span><span class="l">언제든 가능</span></div>
+      </div>
+    </div>
+    <div class="brief-r">
+      <h3>먼저 챙길 것</h3>
+      <ul class="picks" id="picks"></ul>
+    </div>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="frow" id="region-chips">
+    <span class="flabel">지역</span>
+    <button class="chip" data-f="region" data-v="all" aria-pressed="true">전체</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">종류</span>
+    <button class="chip" data-f="type" data-v="all" aria-pressed="true">전체</button>
+    <button class="chip" data-f="type" data-v="과학" aria-pressed="false">과학·수학</button>
+    <button class="chip" data-f="type" data-v="역사" aria-pressed="false">역사·유적</button>
+    <button class="chip" data-f="type" data-v="축제" aria-pressed="false">축제</button>
+    <button class="chip" data-f="type" data-v="전시" aria-pressed="false">전시·미술</button>
+    <button class="chip" data-f="type" data-v="만들기" aria-pressed="false">만들기</button>
+    <button class="chip" data-f="type" data-v="자연" aria-pressed="false">자연·동물</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">아이</span>
+    <button class="chip" data-f="age" data-v="all" aria-pressed="true">둘 다 고려</button>
+    <button class="chip" data-f="age" data-v="both" aria-pressed="false">둘 다 딱 맞음</button>
+    <input class="q" id="q" type="search" placeholder="이름·장소로 찾기" aria-label="이름이나 장소로 검색">
+    <span class="count" id="count"></span>
+  </div>
+</div>
+
+<main id="bands"></main>
+
+<footer>
+  <p><strong>일정은 반드시 공식 사이트에서 한 번 더 확인하세요.</strong> 날짜·시간·예약 방식은 주최 측 사정으로 바뀝니다. 각 카드의 ‘공식 사이트’ 버튼은 검색 결과가 아니라 주최 기관 페이지 또는 예약 창구로 바로 연결됩니다.</p>
+  <p>‘이번 주 / 이번 달 / 다음 달’ 구분은 페이지를 열 때 한국 시각 기준으로 다시 계산되므로, 날짜가 지나면 자동으로 옮겨지거나 목록에서 빠집니다. 행사 내용 자체는 매일 오전 9시(KST)에 갱신됩니다.</p>
+  <p>날짜가 확정된 항목은 대전광역시·공주시·세종시·백제문화제·국립중앙과학관 공식 공지에서 확인한 것이고, ‘언제든 가능’ 항목은 상설 운영 기관입니다. 상설 기관도 휴관일(대개 월요일)과 명절 당일 휴관 여부는 각 사이트에서 확인이 필요합니다.</p>
+  <p>데이터 갱신일 <b id="updated">—</b> · <a href="https://github.com/">저장소에서 데이터 수정하기</a></p>
+</footer>
+
+</div>
+
+<div class="scrim" id="scrim" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet" id="sheet"></div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
